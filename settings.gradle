@@ -1,0 +1,3 @@
+include ':gallery_adapter'
+include ':app'
+rootProject.name = "GalleryAdapterDemo"
