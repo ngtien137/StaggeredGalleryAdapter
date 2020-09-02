@@ -8,18 +8,18 @@ import com.lhd.galleryadapterdemo.data.MediaRepository
 
 class HomeViewModel @Auto private constructor(private val mediaRepository: MediaRepository) :
     ViewModel() {
-    val liveListMedia by lazy {
-        mediaRepository.liveListMedia
+    val liveListPhoto by lazy {
+        mediaRepository.liveListPhoto
     }
 
-    val liveListMediaSelected by lazy {
-        mediaRepository.liveListMediaSelected
+    val liveListPhotoSelected by lazy {
+        mediaRepository.liveListPhotoSelected
     }
 
     val eventLoading = MutableLiveData(Event())
 
     fun loadListMedia(forceLoad: Boolean = false) {
-        mediaRepository.loadListMedia(forceLoad, eventLoading)
+        mediaRepository.loadListPhoto(forceLoad, eventLoading)
     }
 
     fun clearListSelected() {

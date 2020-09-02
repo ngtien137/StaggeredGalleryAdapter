@@ -14,19 +14,19 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class MediaRepository {
-    val liveListMedia by lazy {
-        MutableLiveData<List<AppMedia>>()
+    val liveListPhoto by lazy {
+        MutableLiveData<List<AppPhoto>>()
     }
 
-    val liveListMediaSelected by lazy {
+    val liveListPhotoSelected by lazy {
         MutableLiveData<Stack<AppMedia>>(Stack())
     }
 
-    fun loadListMedia(forceLoad: Boolean = false, eventLoading: MutableLiveData<Event>? = null) {
-        if (forceLoad || liveListMedia.value.isNullOrEmpty()) {
+    fun loadListPhoto(forceLoad: Boolean = false, eventLoading: MutableLiveData<Event>? = null) {
+        if (forceLoad || liveListPhoto.value.isNullOrEmpty()) {
             eventLoading?.value = Event(true)
             doJob({
-                val listMedia = ArrayList<AppMedia>()
+                val listMedia = ArrayList<AppPhoto>()
                 val listImages =
                     getApplication().getMedia(AppPhoto::class.java, onCheckIfAddItem = {
                         File(it.path).exists() && !it.path.endsWith("gif", true)
@@ -35,13 +35,13 @@ class MediaRepository {
                 listMedia
             }, {
                 eventLoading?.value = Event(false)
-                liveListMedia.value = it
+                liveListPhoto.value = it
             }, dispathcherOut = Dispatchers.Main)
         }
     }
 
     fun clearListSelected() {
-        liveListMediaSelected.value?.clear()
-        liveListMediaSelected.postSelf()
+        liveListPhotoSelected.value?.clear()
+        liveListPhotoSelected.postSelf()
     }
 }

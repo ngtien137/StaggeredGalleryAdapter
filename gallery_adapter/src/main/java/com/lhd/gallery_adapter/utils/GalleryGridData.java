@@ -1,5 +1,7 @@
 package com.lhd.gallery_adapter.utils;
 
+import com.lhd.gallery_adapter.model.MediaSize;
+
 public class GalleryGridData {
     private float widthPercent;
     private float heightPercent;
@@ -11,5 +13,9 @@ public class GalleryGridData {
         this.heightPercent = heightPercent;
         this.xPercent = xPercent;
         this.yPercent = yPercent;
+    }
+
+    public MediaSize getMediaSize() {
+        return MediaSize.getMediaSize(widthPercent, heightPercent);
     }
 }
