@@ -8,11 +8,7 @@ import java.util.Map;
 public class CollageGroupLayoutUtils {
 
     private static Map<Integer, Map<String, List<GalleryGridData>>> listSupportedLayout = new HashMap<>();
-    public static float BORDER_PERCENT = 0.01f;
-
-    static {
-        loadSupportedLayouts();
-    }
+    public static float BORDER_PERCENT = 0.0f;
 
     public static List<GalleryGridData> getLayoutSupport(int numberItem, String key) {
         Map<String, List<GalleryGridData>> listLayout = getLayoutSupportForNumberItem(numberItem);
@@ -26,6 +22,8 @@ public class CollageGroupLayoutUtils {
     }
 
     public static void loadSupportedLayouts() {
+        if (!listSupportedLayout.isEmpty())
+            return;
         Map<String, List<GalleryGridData>> map1Item = new HashMap<>();
         map1Item.put("0_0_1", get0_0_1());
         map1Item.put("1_0_0", get1_0_0());

@@ -14,12 +14,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:scaleType="centerCrop"
-            glide_load_path="@{item.path}"
+        <androidx.cardview.widget.CardView
+            android:layout_margin="2dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:src="@mipmap/ic_launcher" />
+            app:cardCornerRadius="14dp">
+
+            <ImageView
+                glide_load_path="@{item.path}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_launcher" />
+        </androidx.cardview.widget.CardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

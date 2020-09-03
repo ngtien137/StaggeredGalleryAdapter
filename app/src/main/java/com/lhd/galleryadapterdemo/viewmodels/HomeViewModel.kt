@@ -19,8 +19,15 @@ class HomeViewModel @Auto private constructor(private val mediaRepository: Media
 
     val eventLoading = MutableLiveData(Event())
 
-    fun loadListMedia(forceLoad: Boolean = false) {
-        mediaRepository.loadListPhoto(forceLoad, eventLoading)
+    var currentItemCount = 0
+    var pageCount = 8
+
+    fun loadListMedia(
+        forceLoad: Boolean = false,
+        eventLoading: MutableLiveData<Event>? = this.eventLoading
+    ) {
+        currentItemCount += pageCount
+        mediaRepository.loadListPhoto(currentItemCount, forceLoad, eventLoading)
     }
 
     fun clearListSelected() {

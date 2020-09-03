@@ -22,15 +22,24 @@ class MediaRepository {
         MutableLiveData<Stack<AppMedia>>(Stack())
     }
 
-    fun loadListPhoto(forceLoad: Boolean = false, eventLoading: MutableLiveData<Event>? = null) {
+    fun loadListPhoto(
+        itemCount: Int,
+        forceLoad: Boolean = false,
+        eventLoading: MutableLiveData<Event>? = null
+    ) {
         if (forceLoad || liveListPhoto.value.isNullOrEmpty()) {
             eventLoading?.value = Event(true)
             doJob({
                 val listMedia = ArrayList<AppPhoto>()
                 val listImages =
-                    getApplication().getMedia(AppPhoto::class.java, onCheckIfAddItem = {
-                        File(it.path).exists() && !it.path.endsWith("gif", true)
-                    })
+                    getApplication().getMedia(
+                        AppPhoto::class.java,
+                        onCheckIfAddItem = { currentList, photo ->
+                            File(photo.path).exists() && !photo.path.endsWith("gif", true)
+                        },
+                        onCheckContinueLoad = { currentList, photo ->
+                            currentList.size < itemCount
+                        })
                 listMedia.addAll(listImages)
                 listMedia
             }, {
