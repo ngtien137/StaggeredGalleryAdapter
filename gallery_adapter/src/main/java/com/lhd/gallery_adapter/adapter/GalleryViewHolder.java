@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lhd.gallery_adapter.BR;
@@ -65,8 +66,9 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
             layoutParams.height = (int) (recyclerView.getWidth() * gridData.getHeightPercent());
             binding.getRoot().setLayoutParams(layoutParams);
             groupLayout.addView(binding.getRoot());
-            layoutParams.setMargins((int)(recyclerView.getWidth() * gridData.getxPercent()),(int)(recyclerView.getWidth() * gridData.getyPercent()),0,(int)(recyclerView.getWidth()*galleryAdapter.getBorderPercent()));
+            layoutParams.setMargins((int) (recyclerView.getWidth() * gridData.getxPercent()), (int) (recyclerView.getWidth() * gridData.getyPercent()), 0, (int) (recyclerView.getWidth() * galleryAdapter.getBorderPercent()));
             binding.setVariable(BR.item, item);
+            binding.setLifecycleOwner((LifecycleOwner) binding.getRoot().getContext());
             binding.executePendingBindings();
         }
     }

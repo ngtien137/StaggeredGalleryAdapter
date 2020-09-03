@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lhd.gallery_adapter.R;
 import com.lhd.gallery_adapter.adapter.listener.IGalleryAdapterListener;
 import com.lhd.gallery_adapter.adapter.module.GalleryLoadMore;
+import com.lhd.gallery_adapter.adapter.module.GallerySelect;
 import com.lhd.gallery_adapter.model.GroupMedia;
 import com.lhd.gallery_adapter.model.IMediaData;
 import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils;
@@ -24,17 +25,29 @@ import java.util.Stack;
 
 public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<GalleryViewHolder> {
 
+    //Max columns in a row current supported
     private static int MAX_COLUMNS = 3;
 
+    //List Group of medias
     private List<GroupMedia<T>> listGroup;
+    //List medias
     private List<T> data;
+    //Layout for media
     private int layoutResource = -1;
     private LayoutInflater layoutInflater;
-    private int collageColums = MAX_COLUMNS;
+
+    /**
+     * collageColumns define how many medias can group with each others
+     * Current support max = MAX_COLUMNS
+     * {@link #MAX_COLUMNS
+     */
+    private int collageColumns = MAX_COLUMNS;
+
     private RecyclerView recyclerView;
     private boolean isShowLoadMore = false;
 
-    private GalleryLoadMore aGalleryLoadMore;
+    private GalleryLoadMore annotationGalleryLoadMore;
+    private GallerySelect annotationSelect;
 
     private IGalleryAdapterListener listener;
 
@@ -47,7 +60,9 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         for (int i = 0; i < listAnnotation.length; i++) {
             Annotation annotation = listAnnotation[i];
             if (annotation instanceof GalleryLoadMore) {
-                aGalleryLoadMore = (GalleryLoadMore) annotation;
+                annotationGalleryLoadMore = (GalleryLoadMore) annotation;
+            } else if (annotation instanceof GallerySelect) {
+                annotationSelect = (GallerySelect) annotation;
             }
         }
     }
@@ -75,6 +90,15 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     }
 
     @Override
+    public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()){
+            super.onBindViewHolder(holder, position, payloads);
+        }else{
+            
+        }
+    }
+
+    @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         this.recyclerView = recyclerView;
@@ -91,7 +115,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == listGroup.size() - 1) {
                     if (!isShowLoadMore) {
-                        if (aGalleryLoadMore != null) {
+                        if (annotationGalleryLoadMore != null) {
                             showLoadMore(true);
                             if (listener != null) {
                                 listener.onHandleLoadMore();
@@ -106,7 +130,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     public void showLoadMore(boolean show) {
         if (show) {
             isShowLoadMore = true;
-            if (aGalleryLoadMore.enableLayoutLoadMore()) {
+            if (annotationGalleryLoadMore.enableLayoutLoadMore()) {
                 listGroup.add(null);
                 try {
                     notifyItemInserted(listGroup.size() - 1);
@@ -116,7 +140,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
             }
         } else {
             isShowLoadMore = false;
-            if (aGalleryLoadMore.enableLayoutLoadMore()) {
+            if (annotationGalleryLoadMore.enableLayoutLoadMore()) {
                 if (!listGroup.isEmpty() && listGroup.get(listGroup.size() - 1) == null) {
                     listGroup.remove(listGroup.get(listGroup.size() - 1));
                     try {
@@ -143,11 +167,11 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     }
 
     public void setData(List<T> data) {
-        setData(data, collageColums, true);
+        setData(data, collageColumns, true);
     }
 
     public void setData(List<T> data, boolean notifyDataAfterGenerate) {
-        setData(data, collageColums, notifyDataAfterGenerate);
+        setData(data, collageColumns, notifyDataAfterGenerate);
     }
 
     public void setData(List<T> data, int columns, boolean notifyDataAfterGenerate) {
@@ -186,16 +210,16 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     }
 
     public GalleryLoadMore getAnnotationLoadMore() {
-        return aGalleryLoadMore;
+        return annotationGalleryLoadMore;
     }
 
     private void setCollageColumns(int columns) {
         if (columns > MAX_COLUMNS) {
-            collageColums = MAX_COLUMNS;
+            collageColumns = MAX_COLUMNS;
         } else if (columns < 1) {
-            collageColums = 1;
+            collageColumns = 1;
         } else {
-            collageColums = columns;
+            collageColumns = columns;
         }
     }
 
@@ -204,7 +228,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     }
 
     public void notifyDataForLoadMore(int oldSizeBeforeLoadMore) {
-        int position = oldSizeBeforeLoadMore - collageColums;
+        int position = oldSizeBeforeLoadMore - collageColumns;
         notifyDataToLastFromPosition(position);
     }
 
@@ -223,8 +247,8 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         while (!stackData.empty()) {
             GroupMedia<T> groupMedia = new GroupMedia<>();
             int recommendSize = 1;
-            if (stackData.size() > collageColums) {
-                recommendSize = collageColums;
+            if (stackData.size() > collageColumns) {
+                recommendSize = collageColumns;
             }
             List<T> subList = new ArrayList<>();
             String keyCollage = "";
