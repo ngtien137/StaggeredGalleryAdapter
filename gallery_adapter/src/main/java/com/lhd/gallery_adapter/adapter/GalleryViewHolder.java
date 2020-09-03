@@ -10,10 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lhd.gallery_adapter.BR;
 import com.lhd.gallery_adapter.R;
+import com.lhd.gallery_adapter.adapter.module.GallerySelect;
 import com.lhd.gallery_adapter.model.GroupMedia;
 import com.lhd.gallery_adapter.model.IMediaData;
 import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils;
@@ -37,6 +39,11 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView = galleryAdapter.getRecyclerView();
         groupLayout.removeAllViews();
         GroupMedia<T> mediaData = galleryAdapter.getGroupData().get(getAdapterPosition());
+
+        GallerySelect annotationGallerySelect = galleryAdapter.getAnnotationSelect();
+        MutableLiveData<Stack<T>> liveListSelected = galleryAdapter.getListSelected();
+        Stack<T> listSelected = liveListSelected.getValue();
+
         if (mediaData == null && getAdapterPosition() == galleryAdapter.getGroupData().size() - 1) {
             int layoutId = galleryAdapter.getAnnotationLoadMore().layoutLoadMoreResource();
             if (layoutId == -1)
@@ -60,7 +67,6 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
             }
             stackData.remove(item);
             ViewDataBinding binding = DataBindingUtil.inflate(galleryAdapter.getLayoutInflater(), galleryAdapter.getLayoutResource(), (ViewGroup) itemView, false);
-            Log.e("Test: ", "RecyclerView: " + galleryAdapter.getRecyclerView().getWidth());
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) binding.getRoot().getLayoutParams();
             layoutParams.width = (int) (recyclerView.getWidth() * gridData.getWidthPercent());
             layoutParams.height = (int) (recyclerView.getWidth() * gridData.getHeightPercent());
@@ -68,8 +74,28 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
             groupLayout.addView(binding.getRoot());
             layoutParams.setMargins((int) (recyclerView.getWidth() * gridData.getxPercent()), (int) (recyclerView.getWidth() * gridData.getyPercent()), 0, (int) (recyclerView.getWidth() * galleryAdapter.getBorderPercent()));
             binding.setVariable(BR.item, item);
+            if (galleryAdapter.getListener() != null)
+                binding.setVariable(BR.listener, galleryAdapter.getListener());
+            binding.setVariable(BR.modeSelected, galleryAdapter.getLiveModeSelected());
+            binding.setVariable(BR.listSelected, galleryAdapter.getListSelected());
             binding.setLifecycleOwner((LifecycleOwner) binding.getRoot().getContext());
             binding.executePendingBindings();
+
+            //For select
+            View viewHandleSelect = binding.getRoot().findViewById(annotationGallerySelect.layoutHandleCheck());
+            if (viewHandleSelect != null && listSelected != null) {
+                boolean selected = listSelected.search(item) != -1;
+                if (annotationGallerySelect.enableSelectedModeByLongClick()){
+                    itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            return true;
+                        }
+                    });
+                }else{
+
+                }
+            }
         }
     }
 

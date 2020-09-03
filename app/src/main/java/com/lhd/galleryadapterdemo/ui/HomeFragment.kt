@@ -26,7 +26,7 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
 
     private val adapter by lazy {
         CollageAdapter(0.00f).apply {
-            setListener(this@HomeFragment)
+            listener = this@HomeFragment
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,7 +52,16 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     private IGalleryAdapterListener listener;
 
+    /**
+     * For select support
+     */
+    private MutableLiveData<Boolean> liveModeSelected = new MutableLiveData<>();
+    private MutableLiveData<Stack<T>> liveListSelected = new MutableLiveData<>();
+    private int lastSelectedPosition = -1;
+
     public GalleryAdapter(int layoutResource, float borderPercent) {
+        liveModeSelected.setValue(false);
+        liveListSelected.setValue(new Stack<>());
         this.data = new ArrayList<>();
         this.layoutResource = layoutResource;
         listGroup = new ArrayList<>();
@@ -69,6 +79,10 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     public GalleryAdapter(int layoutResource) {
         this(layoutResource, 0.0f);
+    }
+
+    public void setListSelected(MutableLiveData<Stack<T>> liveStackSelected) {
+        liveListSelected = liveStackSelected;
     }
 
     @NonNull
@@ -91,10 +105,10 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     @Override
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position, @NonNull List<Object> payloads) {
-        if (payloads.isEmpty()){
+        if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads);
-        }else{
-            
+        } else {
+
         }
     }
 
@@ -134,6 +148,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 listGroup.add(null);
                 try {
                     notifyItemInserted(listGroup.size() - 1);
+                    recyclerView.scrollToPosition(listGroup.size() - 1);
                 } catch (Exception e) {
 
                 }
@@ -209,8 +224,28 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         this.listener = listener;
     }
 
+    public IGalleryAdapterListener getListener() {
+        return listener;
+    }
+
+    public MutableLiveData<Boolean> getLiveModeSelected() {
+        return liveModeSelected;
+    }
+
+    public MutableLiveData<Stack<T>> getListSelected() {
+        return liveListSelected;
+    }
+
     public GalleryLoadMore getAnnotationLoadMore() {
         return annotationGalleryLoadMore;
+    }
+
+    public GallerySelect getAnnotationSelect() {
+        return annotationSelect;
+    }
+
+    public void changeModeSelect(boolean select) {
+        liveModeSelected.setValue(select);
     }
 
     private void setCollageColumns(int columns) {

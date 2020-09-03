@@ -2,15 +2,31 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="androidx.lifecycle.MutableLiveData" />
+
+        <import type="java.util.Stack" />
+
         <variable
             name="item"
             type="Integer" />
+
+        <variable
+            name="listener"
+            type="com.lhd.gallery_adapter.adapter.listener.IGalleryAdapterListener" />
+
+        <variable
+            name="listSelected"
+            type="MutableLiveData&lt;Stack>" />
+
+        <variable
+            name="modeSelected"
+            type="MutableLiveData&lt;Boolean>" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
 
     </FrameLayout>

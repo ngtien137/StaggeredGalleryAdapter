@@ -1,9 +1,9 @@
 package com.lhd.gallery_adapter.adapter.module;
 
-import androidx.annotation.LayoutRes;
+import androidx.annotation.IdRes;
 
 public @interface GallerySelect {
-    @LayoutRes
+    @IdRes
     int layoutHandleCheck() default -1;
 
     boolean enableSelectedModeByLongClick() default true;
