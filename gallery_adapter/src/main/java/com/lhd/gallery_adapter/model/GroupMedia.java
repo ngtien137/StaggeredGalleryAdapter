@@ -1,11 +1,14 @@
 package com.lhd.gallery_adapter.model;
 
+import com.lhd.gallery_adapter.utils.GalleryGridData;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupMedia<T extends IMediaData> {
 
     private List<T> listMedia = new ArrayList<>();
+    private List<GalleryGridData> listGalleryGridData = new ArrayList<>();
 
     public List<T> getListMedia() {
         return listMedia;
@@ -13,6 +16,14 @@ public class GroupMedia<T extends IMediaData> {
 
     public void setListMedia(List<T> listMedia) {
         this.listMedia = listMedia;
+    }
+
+    public List<GalleryGridData> getListGalleryGridData() {
+        return listGalleryGridData;
+    }
+
+    public void setListGalleryGridData(List<GalleryGridData> listGalleryGridData) {
+        this.listGalleryGridData = listGalleryGridData;
     }
 
     public void setListMedia(T media) {

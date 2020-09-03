@@ -18,4 +18,36 @@ public class GalleryGridData {
     public MediaSize getMediaSize() {
         return MediaSize.getMediaSize(widthPercent, heightPercent);
     }
+
+    public float getWidthPercent() {
+        return widthPercent;
+    }
+
+    public void setWidthPercent(float widthPercent) {
+        this.widthPercent = widthPercent;
+    }
+
+    public float getHeightPercent() {
+        return heightPercent;
+    }
+
+    public void setHeightPercent(float heightPercent) {
+        this.heightPercent = heightPercent;
+    }
+
+    public float getxPercent() {
+        return xPercent;
+    }
+
+    public void setxPercent(float xPercent) {
+        this.xPercent = xPercent;
+    }
+
+    public float getyPercent() {
+        return yPercent;
+    }
+
+    public void setyPercent(float yPercent) {
+        this.yPercent = yPercent;
+    }
 }

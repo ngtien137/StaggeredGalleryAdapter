@@ -8,6 +8,7 @@ import com.lhd.galleryadapterdemo.data.MediaRepository
 
 class HomeViewModel @Auto private constructor(private val mediaRepository: MediaRepository) :
     ViewModel() {
+
     val liveListPhoto by lazy {
         mediaRepository.liveListPhoto
     }

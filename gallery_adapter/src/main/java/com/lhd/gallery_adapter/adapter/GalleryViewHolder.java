@@ -1,8 +1,10 @@
 package com.lhd.gallery_adapter.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -13,12 +15,12 @@ import com.lhd.gallery_adapter.BR;
 import com.lhd.gallery_adapter.model.GroupMedia;
 import com.lhd.gallery_adapter.model.IMediaData;
 import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils;
+import com.lhd.gallery_adapter.utils.GalleryGridData;
 
 import java.util.List;
+import java.util.Stack;
 
 class GalleryViewHolder extends RecyclerView.ViewHolder {
-
-    private View itemView;
 
     public float getBorderPercent() {
         return CollageGroupLayoutUtils.BORDER_PERCENT;
@@ -26,18 +28,41 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
 
     public GalleryViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.itemView = itemView;
     }
 
-    public <T extends IMediaData> void applyGroupData(List<GroupMedia<T>> list, int layoutResource, LayoutInflater layoutInflater) {
-        GroupMedia<T> mediaData = list.get(getAdapterPosition());
+    public <T extends IMediaData> void applyToAdapter(GalleryAdapter<T> galleryAdapter) {
+        Log.e("AdapterPosition: ", "" + getAdapterPosition());
+        GroupMedia<T> mediaData = galleryAdapter.getGroupData().get(getAdapterPosition());
         List<T> medias = mediaData.getListMedia();
-        for (int i = 0; i < medias.size(); i++) {
-            T item = medias.get(i);
-            ViewDataBinding binding = DataBindingUtil.inflate(layoutInflater, layoutResource, (ViewGroup) itemView, true);
+        List<GalleryGridData> gridDatas = mediaData.getListGalleryGridData();
+        FrameLayout groupLayout = (FrameLayout) itemView;
+        RecyclerView recyclerView = galleryAdapter.getRecyclerView();
+        groupLayout.removeAllViews();
+        Stack<T> stackData = new Stack<>();
+        stackData.addAll(medias);
+        for (int i = 0; i < gridDatas.size(); i++) {
+            GalleryGridData gridData = gridDatas.get(i);
+            T item = null;
+            for (T media : stackData) {
+                if (media.getMediaSize() == gridData.getMediaSize()) {
+                    item = media;
+                    break;
+                }
+            }
+            stackData.remove(item);
+            ViewDataBinding binding = DataBindingUtil.inflate(galleryAdapter.getLayoutInflater(), galleryAdapter.getLayoutResource(), (ViewGroup) itemView, false);
+            Log.e("Test: ", "RecyclerView: " + galleryAdapter.getRecyclerView().getWidth());
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) binding.getRoot().getLayoutParams();
+            layoutParams.width = (int) (recyclerView.getWidth() * gridData.getWidthPercent());
+            layoutParams.height = (int) (recyclerView.getWidth() * gridData.getHeightPercent());
+            binding.getRoot().setLayoutParams(layoutParams);
+            groupLayout.addView(binding.getRoot());
+            binding.getRoot().setX(recyclerView.getWidth() * gridData.getxPercent());
+            binding.getRoot().setY(recyclerView.getWidth() * gridData.getyPercent());
             binding.setVariable(BR.item, item);
             binding.executePendingBindings();
         }
     }
+
 }
 
