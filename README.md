@@ -6,6 +6,7 @@ Adapter for RecyclerView which makes collage media gallery as StaggeredGridlayou
 - Support create a adapter for show a list as StaggeredGridlayout
 - Support selecting item (single or multiple) depends on databinding and livedata
 - Support load more and handle scroll to last position item
+- Configure features by annotations
 ## Getting Started
 ### Configure build.gradle (Project)
 * Add these lines:
