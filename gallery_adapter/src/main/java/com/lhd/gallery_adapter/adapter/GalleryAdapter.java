@@ -219,28 +219,30 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         super.onAttachedToRecyclerView(recyclerView);
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), RecyclerView.VERTICAL, false));
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
+        if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore()){
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
 
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == listGroup.size() - 1) {
-                    if (!isShowLoadMore) {
-                        if (annotationGalleryLoadMore != null) {
-                            showLoadMore(true);
-                            if (listener != null) {
-                                listener.onHandleLoadMore();
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == listGroup.size() - 1) {
+                        if (!isShowLoadMore) {
+                            if (annotationGalleryLoadMore != null) {
+                                showLoadMore(true);
+                                if (listener != null) {
+                                    listener.onHandleLoadMore();
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void showLoadMore(boolean show) {
@@ -409,7 +411,8 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
             stackData.removeAll(subList);
             listGroupMedia.add(groupMedia);
         }
-        linkListSelectedWithNewDataByMediaSource(data);
+        if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore())
+            linkListSelectedWithNewDataByMediaSource(data);
         listGroup = listGroupMedia;
     }
 
