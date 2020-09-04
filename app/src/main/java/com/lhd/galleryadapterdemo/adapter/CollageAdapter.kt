@@ -1,6 +1,5 @@
 package com.lhd.galleryadapterdemo.adapter
 
-import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.lhd.gallery_adapter.adapter.GalleryAdapter
 import com.lhd.gallery_adapter.adapter.module.GalleryLoadMore

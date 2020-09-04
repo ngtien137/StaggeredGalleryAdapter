@@ -248,7 +248,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     public void showLoadMore(boolean show) {
         if (show) {
             isShowLoadMore = true;
-            if (annotationGalleryLoadMore.enableLayoutLoadMore()) {
+            if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore()) {
                 listGroup.add(null);
                 try {
                     notifyItemInserted(listGroup.size() - 1);
@@ -259,7 +259,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
             }
         } else {
             isShowLoadMore = false;
-            if (annotationGalleryLoadMore.enableLayoutLoadMore()) {
+            if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore()) {
                 if (!listGroup.isEmpty() && listGroup.get(listGroup.size() - 1) == null) {
                     listGroup.remove(listGroup.get(listGroup.size() - 1));
                     try {
