@@ -8,7 +8,7 @@ import com.lhd.galleryadapterdemo.R
 import com.lhd.galleryadapterdemo.models.AppPhoto
 import kotlinx.android.synthetic.main.item_photo.view.*
 
-@GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more)
+@GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more,enableLayoutLoadMore = true)
 @GallerySelect(
     layoutHandleCheck = R.id.cvItem,
     enableMultiSelect = true,
