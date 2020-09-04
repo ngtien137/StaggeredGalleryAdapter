@@ -117,9 +117,9 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     }
 
-    public boolean onHandleLongClickToCheck(T item, GalleryViewHolder holder) {
+    public boolean onHandleLongClickToCheck(View viewHandleSelect,T item, GalleryViewHolder holder) {
         if (annotationSelect != null && annotationSelect.validCheckAgainAfterEnableSelectedByLongClick()) {
-
+            checkValidateCheckWithListener(viewHandleSelect,item, holder);
         }
         return true;
     }
@@ -187,7 +187,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 viewHandleSelect.setOnLongClickListener(view -> {
                     if (!liveModeSelected.getValue())
                         changeModeSelect(true);
-                    return onHandleLongClickToCheck(item, holder);
+                    return onHandleLongClickToCheck(viewHandleSelect,item, holder);
                 });
                 viewHandleSelect.setOnClickListener(view -> {
                     if (liveModeSelected.getValue())
