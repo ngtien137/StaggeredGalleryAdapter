@@ -43,6 +43,7 @@ public class CollageGroupLayoutUtils {
         map3Item.put("0_2_1", get0_2_1());
         map3Item.put("2_0_1", get2_0_1());
         map3Item.put("1_2_0", get1_2_0());
+        map3Item.put("1_0_2", get1_0_2());
         listSupportedLayout.put(3, map3Item);
     }
 
@@ -163,6 +164,16 @@ public class CollageGroupLayoutUtils {
         listLayoutItem.add(new GalleryGridData(size3Item, heightVertical, BORDER_PERCENT, BORDER_PERCENT));
         listLayoutItem.add(new GalleryGridData(size3Item * 2 + BORDER_PERCENT * 2, heightHorizontal, BORDER_PERCENT * 2 + size3Item, BORDER_PERCENT));
         listLayoutItem.add(new GalleryGridData(size3Item * 2 + BORDER_PERCENT * 2, heightHorizontal, BORDER_PERCENT * 2 + size3Item, BORDER_PERCENT * 2 + heightHorizontal));
+        return listLayoutItem;
+    }
+
+    public static List<GalleryGridData> get1_0_2() {
+        List<GalleryGridData> listLayoutItem = new ArrayList<>();
+        float size2Item = getSizePercent(2);
+        float size1Item = getSizePercent(1);
+        listLayoutItem.add(new GalleryGridData(size2Item, size1Item, BORDER_PERCENT, BORDER_PERCENT));
+        listLayoutItem.add(new GalleryGridData(size2Item, size2Item, BORDER_PERCENT * 2 + size2Item, BORDER_PERCENT));
+        listLayoutItem.add(new GalleryGridData(size2Item, size2Item, BORDER_PERCENT * 2 + size2Item, BORDER_PERCENT * 2 + size2Item));
         return listLayoutItem;
     }
 
