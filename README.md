@@ -85,6 +85,33 @@ class CollageAdapter :
     GalleryAdapter<AppPhoto>(R.layout.item_photo) {
 }
 ```
+- Annotations detail:
+```java
+//GalleryLoadMore Annotation
+public @interface GalleryLoadMore {
+  @LayoutRes
+  int layoutLoadMoreResource() default -1; //Define the layout show for loading when scroll to last item
+  boolean enableLayoutLoadMore() default false; //Enable this function or not
+}
+
+//GallerySelect Annotation
+public @interface GallerySelect {
+  @IdRes
+  int layoutHandleCheck() default -1; //Define the view id handle select event
+
+  boolean enableSelectedModeByLongClick() default true; //Enable mode select of adapter by long click or single click
+
+  boolean enableUnSelect() default true; //Enable unselect item
+
+  boolean enableMultiSelect() default false; //enable multiple selection 
+
+  boolean enableSelectItemMultipleTime() default false; //Enable select a item multitime, conflict with unselect function
+
+  boolean disableSelectModeWhenEmpty() default true; //Return normal mode (can be click item not select) when list empty
+
+  boolean validCheckAgainAfterEnableSelectedByLongClick() default true; //Select item after enable select by long click or not
+}
+```
 ### Setup callback and listener
 - IGalleryAdapterListener
 ```java
