@@ -9,5 +9,7 @@ public interface IGalleryAdapterListener<T extends IMediaData> {
 
     void onItemSelected(View viewHandleSelect, T item, int groupPosition, boolean selected);
 
-    void onViewHandleCheckClicked(T item, int position);
+    void onViewHandleCheckClicked(T item, int groupPosition);
+
+    boolean onValidateBeforeCheckingItem(T item, int groupPosition);
 }

@@ -117,24 +117,29 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     }
 
-    public boolean onHandleLongClickToCheck(View viewHandleSelect,T item, GalleryViewHolder holder) {
+    public boolean onHandleLongClickToCheck(View viewHandleSelect, T item, GalleryViewHolder holder) {
         if (annotationSelect != null && annotationSelect.validCheckAgainAfterEnableSelectedByLongClick()) {
-            checkValidateCheckWithListener(viewHandleSelect,item, holder);
+            checkValidateCheckWithListener(viewHandleSelect, item, holder);
         }
         return true;
     }
 
-    /**
-     * This function use for prevent check item with your condition
-     * Such as max selected items is 9, you return false then selecting is not available
-     */
-    public boolean onValidateBeforeCheckingItem(T item, int adapterPosition) {
-        return true;
-    }
-
     public void checkValidateCheckWithListener(View viewHandleSelect, T item, GalleryViewHolder holder) {
-        if (onValidateBeforeCheckingItem(item, holder.getAdapterPosition()) || (liveListSelected.getValue().search(item) != -1 && (annotationSelect.enableUnSelect() && !annotationSelect.enableSelectItemMultipleTime()))) {
-            validateCheck(viewHandleSelect, item, holder);
+        boolean isSelected = isItemSelected(item);
+        if (listener != null) {
+            if (isSelected) {
+                if (annotationSelect.enableUnSelect() && !annotationSelect.enableSelectItemMultipleTime()){
+                    validateCheck(viewHandleSelect, item, holder);
+                }else if (!annotationSelect.enableUnSelect()){
+                    if (listener.onValidateBeforeCheckingItem(item, holder.getAdapterPosition())) {
+                        validateCheck(viewHandleSelect, item, holder);
+                    }
+                }
+            } else {
+                if (listener.onValidateBeforeCheckingItem(item, holder.getAdapterPosition())) {
+                    validateCheck(viewHandleSelect, item, holder);
+                }
+            }
         } else
             validateCheck(viewHandleSelect, item, holder);
     }
@@ -181,13 +186,13 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     public void checkSelected(GalleryViewHolder holder, ViewDataBinding binding, T item) {
         Stack<T> listSelected = liveListSelected.getValue();
-        View viewHandleSelect = binding.getRoot().findViewById(annotationSelect.layoutHandleCheck());
+        View viewHandleSelect = binding.getRoot().findViewById(annotationSelect.viewHandleSelect());
         if (viewHandleSelect != null && listSelected != null) {
             if (annotationSelect.enableSelectedModeByLongClick()) {
                 viewHandleSelect.setOnLongClickListener(view -> {
                     if (!liveModeSelected.getValue())
                         changeModeSelect(true);
-                    return onHandleLongClickToCheck(viewHandleSelect,item, holder);
+                    return onHandleLongClickToCheck(viewHandleSelect, item, holder);
                 });
                 viewHandleSelect.setOnClickListener(view -> {
                     if (liveModeSelected.getValue())
@@ -219,7 +224,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         super.onAttachedToRecyclerView(recyclerView);
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), RecyclerView.VERTICAL, false));
-        if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore()){
+        if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -248,7 +253,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     public void showLoadMore(boolean show) {
         if (show) {
             isShowLoadMore = true;
-            if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore()) {
+            if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
                 listGroup.add(null);
                 try {
                     notifyItemInserted(listGroup.size() - 1);
@@ -259,7 +264,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
             }
         } else {
             isShowLoadMore = false;
-            if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore()) {
+            if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
                 if (!listGroup.isEmpty() && listGroup.get(listGroup.size() - 1) == null) {
                     listGroup.remove(listGroup.get(listGroup.size() - 1));
                     try {
@@ -411,7 +416,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
             stackData.removeAll(subList);
             listGroupMedia.add(groupMedia);
         }
-        if (annotationGalleryLoadMore!=null&&annotationGalleryLoadMore.enableLayoutLoadMore())
+        if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore())
             linkListSelectedWithNewDataByMediaSource(data);
         listGroup = listGroupMedia;
     }

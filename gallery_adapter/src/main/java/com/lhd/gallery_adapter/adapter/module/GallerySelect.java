@@ -4,7 +4,7 @@ import androidx.annotation.IdRes;
 
 public @interface GallerySelect {
     @IdRes
-    int layoutHandleCheck() default -1;
+    int viewHandleSelect() default -1;
 
     boolean enableSelectedModeByLongClick() default true;
 

@@ -77,7 +77,7 @@ class CollageAdapter :
 ```kotlin
 @GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more,enableLayoutLoadMore = true)
 @GallerySelect(
-    layoutHandleCheck = R.id.cvItem,
+    viewHandleSelect = R.id.cvItem,
     enableMultiSelect = true,
     enableSelectedModeByLongClick = true
 )
@@ -97,7 +97,7 @@ public @interface GalleryLoadMore {
 //GallerySelect Annotation
 public @interface GallerySelect {
   @IdRes
-  int layoutHandleCheck() default -1; //Define the view id handle select event
+  int viewHandleSelect() default -1; //Define the view id handle select event
 
   boolean enableSelectedModeByLongClick() default true; //Enable mode select of adapter by long click or single click
 

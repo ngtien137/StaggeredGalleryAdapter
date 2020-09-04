@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_photo.view.*
 
 @GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more,enableLayoutLoadMore = true)
 @GallerySelect(
-    layoutHandleCheck = R.id.cvItem,
+    viewHandleSelect = R.id.cvItem,
     enableMultiSelect = true,
     enableSelectedModeByLongClick = true
 )

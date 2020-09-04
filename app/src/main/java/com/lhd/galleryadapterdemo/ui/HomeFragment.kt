@@ -9,6 +9,7 @@ import com.base.baselibrary.viewmodel.Event
 import com.base.baselibrary.viewmodel.autoViewModels
 import com.base.baselibrary.views.ext.async
 import com.base.baselibrary.views.ext.doJob
+import com.base.baselibrary.views.ext.toast
 import com.lhd.gallery_adapter.adapter.listener.IGalleryAdapterListener
 import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils
 import com.lhd.galleryadapterdemo.R
@@ -87,6 +88,14 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
     ) {
         val scale = if (selected) 0.9f else 1f
         viewHandleSelect?.animate()?.scaleX(scale)?.scaleY(scale)
+    }
+
+    override fun onValidateBeforeCheckingItem(item: AppPhoto?, groupPosition: Int): Boolean {
+        if (adapter.listSelected.value!!.size==6){
+            toast("Limit check 6 items")
+            return false
+        }
+        return true
     }
 
 }
