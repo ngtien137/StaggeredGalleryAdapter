@@ -69,8 +69,8 @@ data class AppPhoto(
 ### Create a adapter extends GalleryAdapter
 - Simple extends:
 ```kotlin
-class CollageAdapter(borderPercent: Float) :
-  GalleryAdapter<AppPhoto>(R.layout.item_photo, borderPercent) {
+class CollageAdapter :
+  GalleryAdapter<AppPhoto>(R.layout.item_photo) {
 }
 ```
 - Apply Support Annotation:
@@ -81,7 +81,42 @@ class CollageAdapter(borderPercent: Float) :
     enableMultiSelect = true,
     enableSelectedModeByLongClick = true
 )
-class CollageAdapter(borderPercent: Float) :
-    GalleryAdapter<AppPhoto>(R.layout.item_photo, borderPercent) {
+class CollageAdapter :
+    GalleryAdapter<AppPhoto>(R.layout.item_photo) {
 }
 ```
+### Setup callback and listener
+- IGalleryAdapterListener
+```java
+public interface IGalleryAdapterListener<T extends IMediaData> {
+    void onHandleLoadMore();
+
+    void onItemSelected(View viewHandleSelect, T item, int groupPosition, boolean selected);
+
+    void onViewHandleCheckClicked(T item, int position);
+}
+```
+- You need create a listener which is instance of IGalleryAdapterListener and set it to adapter:
+```kotlin
+  val galleryAdapter = CollageAdapter()
+  val listener = object : IGalleryAdapterListener<AppPhoto>{
+      override fun onHandleLoadMore() {
+          //Called when the load more action excute
+      }
+
+      override fun onItemSelected(
+          viewHandleSelect: View?,
+          item: AppPhoto?,
+          groupPosition: Int,
+          selected: Boolean
+      ) {
+          //Called when you select one item with GallerySelectSupport
+      }
+
+      override fun onViewHandleCheckClicked(item: AppPhoto?, position: Int) {
+          //Called when you click to the view which handle select event (defined in GallerySelectSupport annotation)
+      }
+  }
+  galleryAdapter.setListener(listener)
+```
+
