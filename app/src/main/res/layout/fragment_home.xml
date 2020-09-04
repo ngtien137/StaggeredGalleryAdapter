@@ -19,6 +19,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="#444"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.HomeFragment">
@@ -44,6 +45,7 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="4dp"
             android:id="@+id/rvGallery"
             rv_set_adapter="@{adapter}"
             android:layout_width="match_parent"
