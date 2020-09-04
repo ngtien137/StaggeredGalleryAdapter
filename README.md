@@ -77,7 +77,7 @@ class CollageAdapter :
 ```kotlin
 @GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more,enableLayoutLoadMore = true)
 @GallerySelect(
-    viewHandleSelect = R.id.cvItem,
+    layoutHandleCheck = R.id.cvItem,
     enableMultiSelect = true,
     enableSelectedModeByLongClick = true
 )
@@ -120,7 +120,9 @@ public interface IGalleryAdapterListener<T extends IMediaData> {
 
     void onItemSelected(View viewHandleSelect, T item, int groupPosition, boolean selected);
 
-    void onViewHandleCheckClicked(T item, int position);
+    void onViewHandleCheckClicked(T item, int groupPosition);
+    
+    void onValidateBeforeCheckingItem(T item, int groupPosition);
 }
 ```
 - You need create a listener which is instance of IGalleryAdapterListener and set it to adapter:
@@ -142,6 +144,12 @@ public interface IGalleryAdapterListener<T extends IMediaData> {
 
       override fun onViewHandleCheckClicked(item: AppPhoto?, position: Int) {
           //Called when you click to the view which handle select event (defined in GallerySelectSupport annotation)
+      }
+      
+      override fun onViewHandleCheckClicked(item: AppPhoto?, position: Int): Boolean {
+          //Called before you select one item with GallerySelectSupport (Let you check your condition for selecting item)
+          //Returning false will prevent selected item
+          return true;
       }
   }
   galleryAdapter.setListener(listener)
