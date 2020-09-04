@@ -37,7 +37,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="@{adapter.liveModeSelected==true?viewModel.liveListPhotoSelected.size() + `item(s) Selected`:`Long Click To Enable Select Mode`}"
+                android:text="@{adapter.liveModeSelected==true?viewModel.liveListPhotoSelected.size() + ` item(s) Selected`:`Long Click To Enable Select Mode`}"
                 android:textColor="#222"
                 android:textSize="20sp"
                 tools:text="0 item selected" />
