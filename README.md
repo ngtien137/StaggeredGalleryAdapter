@@ -65,5 +65,85 @@ data class AppPhoto(
     }
 }
 ```
-- Recommend: As the code above, I define mediaSize in getMediaSize by get a bitmap from path. But as you know, this function is too slow if there're too many items. GalleryAadapter process data depends on this function. So please define media size of media object before set the data to adapter. The code above is only a demo. So if there're too many items, it cause slow loading...
+- Recommend: As the code above, I define mediaSize in getMediaSize by get a bitmap from path. But as you know, this function is too slow if there're too many items. GalleryAadapter process data depends on this function. So please define media size of media object before set the data to adapter. The code above is only a demo. So if there're too many items, it'll cause slow loading when set data
+### Create a adapter extends GalleryAdapter
+- Simple extends:
+```kotlin
+class CollageAdapter :
+  GalleryAdapter<AppPhoto>(R.layout.item_photo) {
+}
+```
+- Apply Support Annotation:
+```kotlin
+@GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more,enableLayoutLoadMore = true)
+@GallerySelect(
+    layoutHandleCheck = R.id.cvItem,
+    enableMultiSelect = true,
+    enableSelectedModeByLongClick = true
+)
+class CollageAdapter :
+    GalleryAdapter<AppPhoto>(R.layout.item_photo) {
+}
+```
+- Annotations detail:
+```java
+//GalleryLoadMore Annotation
+public @interface GalleryLoadMore {
+  @LayoutRes
+  int layoutLoadMoreResource() default -1; //Define the layout show for loading when scroll to last item
+  boolean enableLayoutLoadMore() default false; //Enable this function or not
+}
+
+//GallerySelect Annotation
+public @interface GallerySelect {
+  @IdRes
+  int layoutHandleCheck() default -1; //Define the view id handle select event
+
+  boolean enableSelectedModeByLongClick() default true; //Enable mode select of adapter by long click or single click
+
+  boolean enableUnSelect() default true; //Enable unselect item
+
+  boolean enableMultiSelect() default false; //enable multiple selection 
+
+  boolean enableSelectItemMultipleTime() default false; //Enable select a item multitime, conflict with unselect function
+
+  boolean disableSelectModeWhenEmpty() default true; //Return normal mode (can be click item not select) when list empty
+
+  boolean validCheckAgainAfterEnableSelectedByLongClick() default true; //Select item after enable select by long click or not
+}
+```
+### Setup callback and listener
+- IGalleryAdapterListener
+```java
+public interface IGalleryAdapterListener<T extends IMediaData> {
+    void onHandleLoadMore();
+
+    void onItemSelected(View viewHandleSelect, T item, int groupPosition, boolean selected);
+
+    void onViewHandleCheckClicked(T item, int position);
+}
+```
+- You need create a listener which is instance of IGalleryAdapterListener and set it to adapter:
+```kotlin
+  val galleryAdapter = CollageAdapter()
+  val listener = object : IGalleryAdapterListener<AppPhoto>{
+      override fun onHandleLoadMore() {
+          //Called when the load more action excute
+      }
+
+      override fun onItemSelected(
+          viewHandleSelect: View?,
+          item: AppPhoto?,
+          groupPosition: Int,
+          selected: Boolean
+      ) {
+          //Called when you select one item with GallerySelectSupport
+      }
+
+      override fun onViewHandleCheckClicked(item: AppPhoto?, position: Int) {
+          //Called when you click to the view which handle select event (defined in GallerySelectSupport annotation)
+      }
+  }
+  galleryAdapter.setListener(listener)
+```
 
