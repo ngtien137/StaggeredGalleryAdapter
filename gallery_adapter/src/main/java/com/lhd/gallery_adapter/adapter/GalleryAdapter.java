@@ -124,24 +124,24 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         return true;
     }
 
-    public void checkValidateCheckWithListener(View viewHandleSelect, T item, GalleryViewHolder holder) {
+    public void checkValidateCheckWithListener(View viewRootItem, T item, GalleryViewHolder holder) {
         boolean isSelected = isItemSelected(item);
         if (listener != null) {
             if (isSelected) {
                 if (annotationSelect.enableUnSelect() && !annotationSelect.enableSelectItemMultipleTime()){
-                    validateCheck(viewHandleSelect, item, holder);
+                    validateCheck(viewRootItem, item, holder);
                 }else if (!annotationSelect.enableUnSelect()){
                     if (listener.onValidateBeforeCheckingItem(item, holder.getAdapterPosition())) {
-                        validateCheck(viewHandleSelect, item, holder);
+                        validateCheck(viewRootItem, item, holder);
                     }
                 }
             } else {
                 if (listener.onValidateBeforeCheckingItem(item, holder.getAdapterPosition())) {
-                    validateCheck(viewHandleSelect, item, holder);
+                    validateCheck(viewRootItem, item, holder);
                 }
             }
         } else
-            validateCheck(viewHandleSelect, item, holder);
+            validateCheck(viewRootItem, item, holder);
     }
 
     public T getItem(int adapterPosition) {
@@ -154,7 +154,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         return liveListSelected.getValue().contains(item);
     }
 
-    private void validateCheck(View viewHandleSelect, T item, GalleryViewHolder holder) {
+    private void validateCheck(View viewRootItem, T item, GalleryViewHolder holder) {
         Stack<T> listSelected = liveListSelected.getValue();
         boolean selected = listSelected.search(item) != -1;
         if (annotationSelect.enableSelectItemMultipleTime()) {
@@ -180,11 +180,11 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         liveListSelected.setValue(listSelected);
         if (listener != null) {
             int pos = holder.getAdapterPosition();
-            listener.onItemSelected(viewHandleSelect, getItem(pos), pos, selected);
+            listener.onItemSelected(viewRootItem, getItem(pos), pos, selected);
         }
     }
 
-    public void checkSelected(GalleryViewHolder holder, ViewDataBinding binding, T item) {
+    public void checkSelected(GalleryViewHolder holder, ViewDataBinding binding, T item, View rootItem) {
         Stack<T> listSelected = liveListSelected.getValue();
         View viewHandleSelect = binding.getRoot().findViewById(annotationSelect.viewHandleSelect());
         if (viewHandleSelect != null && listSelected != null) {
@@ -192,11 +192,11 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 viewHandleSelect.setOnLongClickListener(view -> {
                     if (!liveModeSelected.getValue())
                         changeModeSelect(true);
-                    return onHandleLongClickToCheck(viewHandleSelect, item, holder);
+                    return onHandleLongClickToCheck(rootItem, item, holder);
                 });
                 viewHandleSelect.setOnClickListener(view -> {
                     if (liveModeSelected.getValue())
-                        checkValidateCheckWithListener(viewHandleSelect, item, holder);
+                        checkValidateCheckWithListener(rootItem, item, holder);
                     else {
                         checkViewIdHandleSelectSingleClick(holder.getAdapterPosition());
                     }
@@ -206,7 +206,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                     if (!liveModeSelected.getValue())
                         changeModeSelect(true);
                     if (liveModeSelected.getValue())
-                        checkValidateCheckWithListener(viewHandleSelect, item, holder);
+                        checkValidateCheckWithListener(rootItem, item, holder);
                     else {
                         checkViewIdHandleSelectSingleClick(holder.getAdapterPosition());
                     }

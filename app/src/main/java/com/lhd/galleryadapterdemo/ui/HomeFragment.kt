@@ -81,13 +81,13 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
     }
 
     override fun onItemSelected(
-        viewHandleSelect: View?,
+        viewRootItem: View?,
         item: AppPhoto?,
         groupPosition: Int,
         selected: Boolean
     ) {
         val scale = if (selected) 0.9f else 1f
-        viewHandleSelect?.animate()?.scaleX(scale)?.scaleY(scale)
+        viewRootItem?.animate()?.scaleX(scale)?.scaleY(scale)
     }
 
     override fun onValidateBeforeCheckingItem(item: AppPhoto?, groupPosition: Int): Boolean {

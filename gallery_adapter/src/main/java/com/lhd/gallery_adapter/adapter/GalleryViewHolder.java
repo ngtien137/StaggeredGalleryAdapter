@@ -79,7 +79,7 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
 
             //For select
             if (galleryAdapter.getAnnotationSelect() != null)
-                galleryAdapter.checkSelected(this, binding, item);
+                galleryAdapter.checkSelected(this, binding, item,binding.getRoot());
         }
     }
 

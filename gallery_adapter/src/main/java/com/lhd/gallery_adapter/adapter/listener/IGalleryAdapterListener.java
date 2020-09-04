@@ -7,7 +7,7 @@ import com.lhd.gallery_adapter.model.IMediaData;
 public interface IGalleryAdapterListener<T extends IMediaData> {
     void onHandleLoadMore();
 
-    void onItemSelected(View viewHandleSelect, T item, int groupPosition, boolean selected);
+    void onItemSelected(View viewRootItem, T item, int groupPosition, boolean selected);
 
     void onViewHandleCheckClicked(T item, int groupPosition);
 
