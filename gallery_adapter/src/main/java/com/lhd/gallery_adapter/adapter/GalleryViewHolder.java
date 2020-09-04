@@ -39,11 +39,6 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerView = galleryAdapter.getRecyclerView();
         groupLayout.removeAllViews();
         GroupMedia<T> mediaData = galleryAdapter.getGroupData().get(getAdapterPosition());
-
-        GallerySelect annotationGallerySelect = galleryAdapter.getAnnotationSelect();
-        MutableLiveData<Stack<T>> liveListSelected = galleryAdapter.getListSelected();
-        Stack<T> listSelected = liveListSelected.getValue();
-
         if (mediaData == null && getAdapterPosition() == galleryAdapter.getGroupData().size() - 1) {
             int layoutId = galleryAdapter.getAnnotationLoadMore().layoutLoadMoreResource();
             if (layoutId == -1)
@@ -80,24 +75,14 @@ class GalleryViewHolder extends RecyclerView.ViewHolder {
             binding.setVariable(BR.listSelected, galleryAdapter.getListSelected());
             binding.setLifecycleOwner((LifecycleOwner) binding.getRoot().getContext());
             binding.executePendingBindings();
+            galleryAdapter.onBindItemViewHolder(item, getAdapterPosition(), binding);
 
             //For select
-            View viewHandleSelect = binding.getRoot().findViewById(annotationGallerySelect.layoutHandleCheck());
-            if (viewHandleSelect != null && listSelected != null) {
-                boolean selected = listSelected.search(item) != -1;
-                if (annotationGallerySelect.enableSelectedModeByLongClick()){
-                    itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View view) {
-                            return true;
-                        }
-                    });
-                }else{
-
-                }
-            }
+            if (galleryAdapter.getAnnotationSelect() != null)
+                galleryAdapter.checkSelected(this, binding, item);
         }
     }
+
 
 }
 

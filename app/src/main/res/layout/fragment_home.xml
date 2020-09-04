@@ -15,7 +15,7 @@
 
         <variable
             name="adapter"
-            type="androidx.recyclerview.widget.RecyclerView.Adapter" />
+            type="com.lhd.gallery_adapter.adapter.GalleryAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,11 +23,33 @@
         android:layout_height="match_parent"
         tools:context=".ui.HomeFragment">
 
+        <RelativeLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
+                android:text="@{adapter.liveModeSelected==true?viewModel.liveListPhotoSelected.size() + `item(s) Selected`:`Long Click To Enable Select Mode`}"
+                android:textColor="#222"
+                android:textSize="20sp"
+                tools:text="0 item selected" />
+
+        </RelativeLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvGallery"
             rv_set_adapter="@{adapter}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBar"
             tools:listitem="@layout/item_photo" />
 
         <LinearLayout

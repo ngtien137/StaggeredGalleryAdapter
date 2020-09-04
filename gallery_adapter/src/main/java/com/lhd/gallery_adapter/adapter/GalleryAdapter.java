@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,7 +51,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     private GalleryLoadMore annotationGalleryLoadMore;
     private GallerySelect annotationSelect;
 
-    private IGalleryAdapterListener listener;
+    private IGalleryAdapterListener<T> listener;
 
     /**
      * For select support
@@ -108,8 +109,109 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads);
         } else {
+            holder.applyToAdapter(this);
+        }
+    }
+
+    public void onBindItemViewHolder(@NonNull T item, int groupPosition, @NonNull ViewDataBinding binding) {
+
+    }
+
+    public boolean onHandleLongClickToCheck(T item, GalleryViewHolder holder) {
+        if (annotationSelect != null && annotationSelect.validCheckAgainAfterEnableSelectedByLongClick()) {
 
         }
+        return true;
+    }
+
+    /**
+     * This function use for prevent check item with your condition
+     * Such as max selected items is 9, you return false then selecting is not available
+     */
+    public boolean onValidateBeforeCheckingItem(T item, int adapterPosition) {
+        return true;
+    }
+
+    public void checkValidateCheckWithListener(View viewHandleSelect, T item, GalleryViewHolder holder) {
+        if (onValidateBeforeCheckingItem(item, holder.getAdapterPosition()) || (liveListSelected.getValue().search(item) != -1 && (annotationSelect.enableUnSelect() && !annotationSelect.enableSelectItemMultipleTime()))) {
+            validateCheck(viewHandleSelect, item, holder);
+        } else
+            validateCheck(viewHandleSelect, item, holder);
+    }
+
+    public T getItem(int adapterPosition) {
+        return data.get(adapterPosition);
+    }
+
+    public boolean isItemSelected(T item) {
+        if (liveListSelected.getValue() == null)
+            return false;
+        return liveListSelected.getValue().contains(item);
+    }
+
+    private void validateCheck(View viewHandleSelect, T item, GalleryViewHolder holder) {
+        Stack<T> listSelected = liveListSelected.getValue();
+        boolean selected = listSelected.search(item) != -1;
+        if (annotationSelect.enableSelectItemMultipleTime()) {
+            selected = false;
+        }
+        if (selected) {
+            if (annotationSelect.enableUnSelect()) {
+                listSelected.remove(item);
+                lastSelectedPosition = -1;
+                selected = false;
+                if (listSelected.isEmpty() && annotationSelect.disableSelectModeWhenEmpty()) {
+                    changeModeSelect(false);
+                }
+            }
+        } else {
+            lastSelectedPosition = holder.getAdapterPosition();
+            if (!annotationSelect.enableMultiSelect()) {
+                listSelected.clear();
+            }
+            listSelected.push(item);
+            selected = true;
+        }
+        liveListSelected.setValue(listSelected);
+        if (listener != null) {
+            int pos = holder.getAdapterPosition();
+            listener.onItemSelected(viewHandleSelect, getItem(pos), pos, selected);
+        }
+    }
+
+    public void checkSelected(GalleryViewHolder holder, ViewDataBinding binding, T item) {
+        Stack<T> listSelected = liveListSelected.getValue();
+        View viewHandleSelect = binding.getRoot().findViewById(annotationSelect.layoutHandleCheck());
+        if (viewHandleSelect != null && listSelected != null) {
+            if (annotationSelect.enableSelectedModeByLongClick()) {
+                viewHandleSelect.setOnLongClickListener(view -> {
+                    if (!liveModeSelected.getValue())
+                        changeModeSelect(true);
+                    return onHandleLongClickToCheck(item, holder);
+                });
+                viewHandleSelect.setOnClickListener(view -> {
+                    if (liveModeSelected.getValue())
+                        checkValidateCheckWithListener(viewHandleSelect, item, holder);
+                    else {
+                        checkViewIdHandleSelectSingleClick(holder.getAdapterPosition());
+                    }
+                });
+            } else {
+                viewHandleSelect.setOnClickListener(view -> {
+                    if (!liveModeSelected.getValue())
+                        changeModeSelect(true);
+                    if (liveModeSelected.getValue())
+                        checkValidateCheckWithListener(viewHandleSelect, item, holder);
+                    else {
+                        checkViewIdHandleSelectSingleClick(holder.getAdapterPosition());
+                    }
+                });
+            }
+        }
+    }
+
+    private void checkViewIdHandleSelectSingleClick(int position) {
+        listener.onViewHandleCheckClicked(getItem(position), position);
     }
 
     @Override
@@ -220,11 +322,11 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         return recyclerView;
     }
 
-    public void setListener(IGalleryAdapterListener listener) {
+    public void setListener(IGalleryAdapterListener<T> listener) {
         this.listener = listener;
     }
 
-    public IGalleryAdapterListener getListener() {
+    public IGalleryAdapterListener<T> getListener() {
         return listener;
     }
 
@@ -307,7 +409,28 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
             stackData.removeAll(subList);
             listGroupMedia.add(groupMedia);
         }
+        linkListSelectedWithNewDataByMediaSource(data);
         listGroup = listGroupMedia;
     }
+
+    private void linkListSelectedWithNewDataByMediaSource(List<T> newData) {
+        for (int i = 0; i < newData.size(); i++) {
+            T item = newData.get(i);
+            int index = 0;
+            Stack<T> listSelected = liveListSelected.getValue();
+            if (listSelected != null && !listSelected.isEmpty()) {
+                while (index < listSelected.size()) {
+                    if (listSelected.get(index).getMediaDataSource().equalsIgnoreCase(item.getMediaDataSource())) {
+                        listSelected.remove(index);
+                        listSelected.add(index, item);
+                    }
+                    index++;
+                }
+            }
+
+        }
+    }
+
+
 }
 

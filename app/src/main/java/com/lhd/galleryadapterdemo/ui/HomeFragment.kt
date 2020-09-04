@@ -1,5 +1,6 @@
 package com.lhd.galleryadapterdemo.ui
 
+import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.base.baselibrary.utils.observer
@@ -13,11 +14,13 @@ import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils
 import com.lhd.galleryadapterdemo.R
 import com.lhd.galleryadapterdemo.adapter.CollageAdapter
 import com.lhd.galleryadapterdemo.databinding.FragmentHomeBinding
+import com.lhd.galleryadapterdemo.models.AppPhoto
 import com.lhd.galleryadapterdemo.viewmodels.HomeViewModel
+import kotlinx.android.synthetic.main.item_photo.view.*
 import kotlinx.coroutines.Dispatchers
 
 
-class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterListener {
+class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterListener<AppPhoto> {
     override fun getLayoutId(): Int {
         return R.layout.fragment_home
     }
@@ -33,6 +36,7 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
     override fun initBinding() {
         binding.viewModel = viewModel
         binding.adapter = adapter
+        adapter.listSelected = viewModel.liveListPhotoSelected
     }
 
     override fun initView() {
@@ -54,6 +58,9 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
             viewModel.loadListMedia()
         }
         //binding.rvGallery.addItemDecoration(DividerItemDecoration(activity, RecyclerView.VERTICAL))
+        observer(viewModel.liveListPhotoSelected){
+
+        }
     }
 
     override fun setHandleBack(): Boolean {
@@ -66,6 +73,20 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
         isLoadMore = true
         lastListGroupSize = adapter.groupData.size
         viewModel.loadListMedia(true, eventLoading = null)
+    }
+
+    override fun onViewHandleCheckClicked(item: AppPhoto?, position: Int) {
+
+    }
+
+    override fun onItemSelected(
+        viewHandleSelect: View?,
+        item: AppPhoto?,
+        groupPosition: Int,
+        selected: Boolean
+    ) {
+        val scale = if (selected) 0.9f else 1f
+        viewHandleSelect?.animate()?.scaleX(scale)?.scaleY(scale)
     }
 
 }

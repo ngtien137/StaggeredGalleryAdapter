@@ -1,5 +1,13 @@
 package com.lhd.gallery_adapter.adapter.listener;
 
-public interface IGalleryAdapterListener {
+import android.view.View;
+
+import com.lhd.gallery_adapter.model.IMediaData;
+
+public interface IGalleryAdapterListener<T extends IMediaData> {
     void onHandleLoadMore();
+
+    void onItemSelected(View viewHandleSelect, T item, int groupPosition, boolean selected);
+
+    void onViewHandleCheckClicked(T item, int position);
 }

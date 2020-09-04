@@ -19,7 +19,7 @@ class MediaRepository {
     }
 
     val liveListPhotoSelected by lazy {
-        MutableLiveData<Stack<AppMedia>>(Stack())
+        MutableLiveData<Stack<AppPhoto>>(Stack())
     }
 
     fun loadListPhoto(
