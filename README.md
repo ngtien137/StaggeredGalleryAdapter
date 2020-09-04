@@ -65,5 +65,5 @@ data class AppPhoto(
     }
 }
 ```
-- As the code above, I define mediaSize in getMediaSize by get a bitmap from path. But as you know, this function is too slow if there're too many items.
+- Recommend: As the code above, I define mediaSize in getMediaSize by get a bitmap from path. But as you know, this function is too slow if there're too many items. GalleryAadapter process data depends on this function. So please define media size of media object before set the data to adapter. The code above is only a demo. So if there're too many items, it cause slow loading...
 
