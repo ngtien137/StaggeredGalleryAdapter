@@ -74,7 +74,7 @@ class CollageAdapter(borderPercent: Float) :
 }
 ```
 - Apply Support Annotation:
-``kotlin
+```kotlin
 @GalleryLoadMore(layoutLoadMoreResource = R.layout.item_load_more,enableLayoutLoadMore = true)
 @GallerySelect(
     layoutHandleCheck = R.id.cvItem,
@@ -84,3 +84,4 @@ class CollageAdapter(borderPercent: Float) :
 class CollageAdapter(borderPercent: Float) :
     GalleryAdapter<AppPhoto>(R.layout.item_photo, borderPercent) {
 }
+```
