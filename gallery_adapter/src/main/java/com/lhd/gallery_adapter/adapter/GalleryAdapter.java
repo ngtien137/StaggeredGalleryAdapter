@@ -128,9 +128,9 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         boolean isSelected = isItemSelected(item);
         if (listener != null) {
             if (isSelected) {
-                if (annotationSelect.enableUnSelect() && !annotationSelect.enableSelectItemMultipleTime()){
+                if (annotationSelect.enableUnSelect() && !annotationSelect.enableSelectItemMultipleTime()) {
                     validateCheck(viewRootItem, item, holder);
-                }else if (!annotationSelect.enableUnSelect()){
+                } else if (!annotationSelect.enableUnSelect()) {
                     if (listener.onValidateBeforeCheckingItem(item, holder.getAdapterPosition())) {
                         validateCheck(viewRootItem, item, holder);
                     }
@@ -235,12 +235,14 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == listGroup.size() - 1) {
-                        if (!isShowLoadMore) {
-                            if (annotationGalleryLoadMore != null) {
-                                showLoadMore(true);
-                                if (listener != null) {
-                                    listener.onHandleLoadMore();
+                    if (linearLayoutManager != null) {
+                        int lastCompleteShownPosition = linearLayoutManager.findLastVisibleItemPosition();
+                        if (lastCompleteShownPosition == listGroup.size() - 1) {
+                            if (!isShowLoadMore) {
+                                if (annotationGalleryLoadMore != null) {
+                                    if (listener != null) {
+                                        listener.onHandleLoadMore();
+                                    }
                                 }
                             }
                         }
@@ -277,6 +279,10 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         }
     }
 
+    public boolean isShowLoadMore() {
+        return isShowLoadMore;
+    }
+
     public float getBorderPercent() {
         return CollageGroupLayoutUtils.BORDER_PERCENT;
     }
@@ -309,7 +315,6 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 }
             });
         }
-        showLoadMore(false);
     }
 
 
@@ -384,6 +389,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
     public void generateListGroup(List<T> data) {
         if (data.isEmpty())
             return;
+        isShowLoadMore = false;
         CollageGroupLayoutUtils.loadSupportedLayouts();
         Stack<T> stackData = new Stack<>();
         stackData.addAll(data);
