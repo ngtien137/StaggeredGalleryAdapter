@@ -1,6 +1,5 @@
 package com.lhd.gallery_adapter.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lhd.gallery_adapter.BR;
 import com.lhd.gallery_adapter.R;
-import com.lhd.gallery_adapter.adapter.module.GallerySelect;
 import com.lhd.gallery_adapter.model.GroupMedia;
 import com.lhd.gallery_adapter.model.IMediaData;
 import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils;

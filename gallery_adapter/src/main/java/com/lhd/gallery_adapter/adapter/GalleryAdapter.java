@@ -2,6 +2,7 @@ package com.lhd.gallery_adapter.adapter;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.Stack;
 
 public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<GalleryViewHolder> {
+
+    public static boolean ENABLE_LOG = false;
 
     //Max columns in a row current supported
     private static int MAX_COLUMNS = 3;
@@ -261,7 +264,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                     notifyItemInserted(listGroup.size() - 1);
                     recyclerView.scrollToPosition(listGroup.size() - 1);
                 } catch (Exception e) {
-
+                    loge("Error when notify add load more: ",e.toString());
                 }
             }
         } else {
@@ -270,9 +273,9 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                 if (!listGroup.isEmpty() && listGroup.get(listGroup.size() - 1) == null) {
                     listGroup.remove(listGroup.get(listGroup.size() - 1));
                     try {
-                        notifyItemRemoved(listGroup.size() - 1);
+                        notifyItemRemoved(listGroup.size());
                     } catch (Exception e) {
-
+                        loge("Error when notify remove load more: ",e.toString());
                     }
                 }
             }
@@ -445,6 +448,18 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         }
     }
 
-
+    public void loge(Object... message) {
+        if (ENABLE_LOG) {
+            StringBuilder mes = new StringBuilder();
+            for (Object sMes : message
+            ) {
+                String m = "null";
+                if (sMes != null)
+                    m = sMes.toString();
+                mes.append(m);
+            }
+            Log.e("AudioWaveViewLog", mes.toString());
+        }
+    }
 }
 

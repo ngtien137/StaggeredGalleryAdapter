@@ -10,6 +10,7 @@ import com.base.baselibrary.viewmodel.autoViewModels
 import com.base.baselibrary.views.ext.async
 import com.base.baselibrary.views.ext.doJob
 import com.base.baselibrary.views.ext.toast
+import com.lhd.gallery_adapter.adapter.GalleryAdapter
 import com.lhd.gallery_adapter.adapter.listener.IGalleryAdapterListener
 import com.lhd.gallery_adapter.utils.CollageGroupLayoutUtils
 import com.lhd.galleryadapterdemo.R
@@ -35,6 +36,7 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
     }
 
     override fun initBinding() {
+        GalleryAdapter.ENABLE_LOG = true
         binding.viewModel = viewModel
         binding.adapter = adapter
         adapter.listSelected = viewModel.liveListPhotoSelected
