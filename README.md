@@ -135,7 +135,7 @@ public interface IGalleryAdapterListener<T extends IMediaData> {
           //For showing load more, you need call function:
           galleryAdapter.showLoadMore(true);
           //And for hiding load more you can call
-          galleryAdapter.showLoadMore(true);
+          galleryAdapter.showLoadMore(false);
           //Or when you set data again, loading more view will be hidden
       }
 
