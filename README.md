@@ -130,7 +130,13 @@ public interface IGalleryAdapterListener<T extends IMediaData> {
   val galleryAdapter = CollageAdapter()
   val listener = object : IGalleryAdapterListener<AppPhoto>{
       override fun onHandleLoadMore() {
-          //Called when the load more action excute
+          //Called when the load more action excute (scroll to last position)
+          //it's not called when load more is showing
+          //For showing load more, you need call function:
+          galleryAdapter.showLoadMore(true);
+          //And for hiding load more you can call
+          galleryAdapter.showLoadMore(true);
+          //Or when you set data again, loading more view will be hidden
       }
 
       override fun onItemSelected(
