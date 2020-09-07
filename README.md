@@ -65,7 +65,7 @@ data class AppPhoto(
     }
 }
 ```
-- Recommend: As the code above, I define mediaSize in getMediaSize by get a bitmap from path. But as you know, this function is too slow if there're too many items. GalleryAadapter process data depends on this function. So please define media size of media object before set the data to adapter. The code above is only a demo. So if there're too many items, it'll cause slow loading when set data
+- Recommend: As the code above, I define mediaSize in getMediaSize by get a bitmap from path. But as you know, this function is too slow if there're too many items. GalleryAadapter processes data depends on this function. So please define media size of media object before setting the data to adapter. The code above is just a demo. So if there're too many items, it'll cause slow loading when set data
 ### Create a adapter extends GalleryAdapter
 - Simple extends:
 ```kotlin
