@@ -60,7 +60,7 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
             viewModel.loadListMedia()
         }
         //binding.rvGallery.addItemDecoration(DividerItemDecoration(activity, RecyclerView.VERTICAL))
-        observer(viewModel.liveListPhotoSelected){
+        observer(viewModel.liveListPhotoSelected) {
 
         }
     }
@@ -91,11 +91,19 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
     }
 
     override fun onValidateBeforeCheckingItem(item: AppPhoto?, groupPosition: Int): Boolean {
-        if (adapter.listSelected.value!!.size==6){
+        if (adapter.listSelected.value!!.size == 6) {
             toast("Limit check 6 items")
             return false
         }
         return true
+    }
+
+    override fun onViewClick(vId: Int) {
+        when (vId) {
+            R.id.btnGroupMode -> {
+                navigateTo(R.id.action_homeFragment_to_groupFragment)
+            }
+        }
     }
 
 }

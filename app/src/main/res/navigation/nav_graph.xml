@@ -9,5 +9,14 @@
         android:id="@+id/homeFragment"
         android:name="com.lhd.galleryadapterdemo.ui.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_groupFragment"
+            app:destination="@id/groupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupFragment"
+        android:name="com.lhd.galleryadapterdemo.ui.GroupFragment"
+        android:label="GroupFragment"
+        tools:layout="@layout/fragment_group" />
 </navigation>

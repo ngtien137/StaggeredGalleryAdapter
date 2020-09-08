@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="androidx.lifecycle.MutableLiveData" />
+
+        <import type="java.util.Stack" />
+
+        <import type="com.lhd.galleryadapterdemo.models.AppPhoto" />
+
+        <variable
+            name="item"
+            type="AppPhoto" />
+
+        <variable
+            name="modeSelected"
+            type="MutableLiveData&lt;Boolean>" />
+
+        <variable
+            name="listSelected"
+            type="MutableLiveData&lt;Stack&lt;AppPhoto>>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            app:cardCornerRadius="14dp">
+
+            <ImageView
+                android:id="@+id/imgPhoto"
+                glide_load_path="@{item.path}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_launcher" />
+
+            <CheckBox
+                anim_visible="@{modeSelected==true}"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:checked="@{listSelected.search(item)!=-1}"
+                android:clickable="false"
+                android:focusable="false" />
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

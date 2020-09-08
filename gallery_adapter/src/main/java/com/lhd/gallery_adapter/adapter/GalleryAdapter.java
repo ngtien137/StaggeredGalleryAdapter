@@ -341,6 +341,10 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         this.listener = listener;
     }
 
+    public void setLiveModeSelected(MutableLiveData<Boolean> liveModeSelected){
+        this.liveModeSelected = liveModeSelected;
+    }
+
     public IGalleryAdapterListener<T> getListener() {
         return listener;
     }

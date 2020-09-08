@@ -22,6 +22,10 @@
         <variable
             name="modeSelected"
             type="MutableLiveData&lt;Boolean>" />
+
+        <variable
+            name="adapter"
+            type="com.lhd.gallery_adapter.adapter.GalleryAdapter" />
     </data>
 
     <FrameLayout

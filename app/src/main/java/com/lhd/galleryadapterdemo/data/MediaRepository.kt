@@ -6,7 +6,6 @@ import com.base.baselibrary.utils.media_provider.getMedia
 import com.base.baselibrary.utils.postSelf
 import com.base.baselibrary.viewmodel.Event
 import com.base.baselibrary.views.ext.doJob
-import com.lhd.galleryadapterdemo.models.AppMedia
 import com.lhd.galleryadapterdemo.models.AppPhoto
 import kotlinx.coroutines.Dispatchers
 import java.io.File

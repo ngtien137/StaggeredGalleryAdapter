@@ -4,9 +4,11 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import com.base.baselibrary.utils.media_provider.MediaInfo
+import com.base.baselibrary.utils.toFormat
 import com.lhd.gallery_adapter.model.IMediaData
 import com.lhd.gallery_adapter.model.MediaSize
 import com.lhd.galleryadapterdemo.utils.Const
+import java.text.SimpleDateFormat
 import java.util.*
 
 data class AppPhoto(
@@ -34,6 +36,10 @@ data class AppPhoto(
 
     override fun getMediaDataSource(): String {
         return path
+    }
+
+    override fun getKeyGroup(): String {
+        return Date(date*1000).toFormat("dd-MM-yyyy")
     }
 }
 

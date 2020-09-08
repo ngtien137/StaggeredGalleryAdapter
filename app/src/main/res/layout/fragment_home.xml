@@ -19,9 +19,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="#444"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#444"
         tools:context=".ui.HomeFragment">
 
         <RelativeLayout
@@ -39,17 +39,31 @@
                 android:gravity="center_vertical"
                 android:text="@{adapter.liveModeSelected==true?viewModel.liveListPhotoSelected.size() + ` item(s) Selected`:`Long Click To Enable Select Mode`}"
                 android:textColor="#222"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 tools:text="0 item selected" />
+
+            <TextView
+                android:id="@+id/btnGroupMode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="?selectableItemBackground"
+                android:gravity="center"
+                android:onClick="@{viewListener::onClick}"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@string/group_mode"
+                android:textColor="#0ff" />
 
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="4dp"
             android:id="@+id/rvGallery"
             rv_set_adapter="@{adapter}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBar"
             tools:listitem="@layout/item_photo" />
