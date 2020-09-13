@@ -240,7 +240,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                     if (linearLayoutManager != null) {
                         int lastCompleteShownPosition = linearLayoutManager.findLastVisibleItemPosition();
-                        if (lastCompleteShownPosition == listGroup.size() - 1) {
+                        if (lastCompleteShownPosition == listGroup.size() - 1 && dy > 0) {
                             if (!isShowLoadMore) {
                                 if (annotationGalleryLoadMore != null) {
                                     if (listener != null) {
@@ -257,26 +257,34 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
 
     public void showLoadMore(boolean show) {
         if (show) {
-            isShowLoadMore = true;
-            if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
-                listGroup.add(null);
-                try {
-                    notifyItemInserted(listGroup.size() - 1);
-                    recyclerView.scrollToPosition(listGroup.size() - 1);
-                } catch (Exception e) {
-                    loge("Error when notify add load more: ",e.toString());
-                }
-            }
+            addLoadMoreItem();
         } else {
-            isShowLoadMore = false;
-            if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
-                if (!listGroup.isEmpty() && listGroup.get(listGroup.size() - 1) == null) {
-                    listGroup.remove(listGroup.get(listGroup.size() - 1));
-                    try {
-                        notifyItemRemoved(listGroup.size());
-                    } catch (Exception e) {
-                        loge("Error when notify remove load more: ",e.toString());
-                    }
+            removeLoadMoreItem();
+        }
+    }
+
+    private void addLoadMoreItem() {
+        isShowLoadMore = true;
+        if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
+            listGroup.add(null);
+            try {
+                notifyItemInserted(listGroup.size() - 1);
+                recyclerView.scrollToPosition(listGroup.size() - 1);
+            } catch (Exception e) {
+                loge("Error when notify add load more: ", e.toString());
+            }
+        }
+    }
+
+    private void removeLoadMoreItem() {
+        isShowLoadMore = false;
+        if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore()) {
+            if (!listGroup.isEmpty() && listGroup.get(listGroup.size() - 1) == null) {
+                listGroup.remove(listGroup.get(listGroup.size() - 1));
+                try {
+                    notifyItemRemoved(listGroup.size());
+                } catch (Exception e) {
+                    loge("Error when notify remove load more: ", e.toString());
                 }
             }
         }
@@ -341,7 +349,7 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         this.listener = listener;
     }
 
-    public void setLiveModeSelected(MutableLiveData<Boolean> liveModeSelected){
+    public void setLiveModeSelected(MutableLiveData<Boolean> liveModeSelected) {
         this.liveModeSelected = liveModeSelected;
     }
 
@@ -388,49 +396,55 @@ public class GalleryAdapter<T extends IMediaData> extends RecyclerView.Adapter<G
         notifyDataToLastFromPosition(position);
     }
 
+    public void notifyLoadMoreIfStillShow() {
+        notifyItemRemoved(listGroup.size());
+    }
+
     public void generateListGroup(List<T> data, int columns) {
         setCollageColumns(columns);
         generateListGroup(data);
     }
 
     public void generateListGroup(List<T> data) {
-        if (data.isEmpty())
-            return;
-        isShowLoadMore = false;
         CollageGroupLayoutUtils.loadSupportedLayouts();
         Stack<T> stackData = new Stack<>();
         stackData.addAll(data);
         List<GroupMedia<T>> listGroupMedia = new ArrayList<>();
-        while (!stackData.empty()) {
-            GroupMedia<T> groupMedia = new GroupMedia<>();
-            int recommendSize = 1;
-            if (stackData.size() > collageColumns) {
-                recommendSize = collageColumns;
-            }
-            List<T> subList = new ArrayList<>();
-            String keyCollage = "";
-            do {
-                subList.clear();
-                if (stackData.size() == 1) {
-                    subList.add(stackData.get(0));
-                } else {
-                    for (int i = 0; i < recommendSize; i++) {
-                        subList.add(stackData.get(i));
+        isShowLoadMore = false;
+        if (data.isEmpty()) {
+
+        } else {
+            while (!stackData.empty()) {
+                GroupMedia<T> groupMedia = new GroupMedia<>();
+                int recommendSize = 1;
+                if (stackData.size() > collageColumns) {
+                    recommendSize = collageColumns;
+                }
+                List<T> subList = new ArrayList<>();
+                String keyCollage = "";
+                do {
+                    subList.clear();
+                    if (stackData.size() == 1) {
+                        subList.add(stackData.get(0));
+                    } else {
+                        for (int i = 0; i < recommendSize; i++) {
+                            subList.add(stackData.get(i));
+                        }
                     }
-                }
-                keyCollage = GroupMedia.getKeyCollage(subList);
-                if (CollageGroupLayoutUtils.getLayoutSupport(recommendSize, keyCollage) != null) {
-                    groupMedia.setListGalleryGridData(CollageGroupLayoutUtils.getLayoutSupport(recommendSize, keyCollage));
-                    break;
-                }
-                recommendSize--;
-            } while (recommendSize > 0 && CollageGroupLayoutUtils.getLayoutSupport(recommendSize + 1, keyCollage) == null);
-            groupMedia.setListMedia(subList);
-            stackData.removeAll(subList);
-            listGroupMedia.add(groupMedia);
+                    keyCollage = GroupMedia.getKeyCollage(subList);
+                    if (CollageGroupLayoutUtils.getLayoutSupport(recommendSize, keyCollage) != null) {
+                        groupMedia.setListGalleryGridData(CollageGroupLayoutUtils.getLayoutSupport(recommendSize, keyCollage));
+                        break;
+                    }
+                    recommendSize--;
+                } while (recommendSize > 0 && CollageGroupLayoutUtils.getLayoutSupport(recommendSize + 1, keyCollage) == null);
+                groupMedia.setListMedia(subList);
+                stackData.removeAll(subList);
+                listGroupMedia.add(groupMedia);
+            }
+            if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore())
+                linkListSelectedWithNewDataByMediaSource(data);
         }
-        if (annotationGalleryLoadMore != null && annotationGalleryLoadMore.enableLayoutLoadMore())
-            linkListSelectedWithNewDataByMediaSource(data);
         listGroup = listGroupMedia;
     }
 

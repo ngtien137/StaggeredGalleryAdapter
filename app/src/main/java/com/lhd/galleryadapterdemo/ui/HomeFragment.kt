@@ -48,10 +48,14 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
                 async({
                     adapter.setData(list, false)
                 }, {
-                    if (adapter.isShowLoadMore) {
-                        adapter.notifyDataSetChanged()
+                    if (isLoadMore) {
+                        isLoadMore = false
+                        if (lastListGroupSize != adapter.groupData.size)
+                            adapter.notifyDataForLoadMore(lastListGroupSize)
+                        else
+                            adapter.notifyLoadMoreIfStillShow()
                     } else {
-                        adapter.notifyDataForLoadMore(lastListGroupSize)
+                        adapter.notifyDataSetChanged()
                     }
                 }, dispathcherOut = Dispatchers.Main)
             }
@@ -70,9 +74,11 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
     }
 
     private var lastListGroupSize = 0
+    private var isLoadMore = false
     override fun onHandleLoadMore() {
-        adapter.showLoadMore(true)
+        isLoadMore = true
         lastListGroupSize = adapter.groupData.size
+        adapter.showLoadMore(true)
         viewModel.loadListMedia(true, eventLoading = null)
     }
 
