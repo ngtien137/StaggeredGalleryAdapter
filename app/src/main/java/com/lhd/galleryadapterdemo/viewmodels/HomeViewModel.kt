@@ -27,7 +27,7 @@ class HomeViewModel @Auto private constructor(private val mediaRepository: Media
         eventLoading: MutableLiveData<Event>? = this.eventLoading
     ) {
 //        if (currentItemCount < 24)
-//            currentItemCount += pageCount //Check case no load more
+            currentItemCount += pageCount //Check case no load more
         mediaRepository.loadListPhoto(currentItemCount, forceLoad, eventLoading)
     }
 

@@ -42,20 +42,6 @@
                 android:textSize="16sp"
                 tools:text="0 item selected" />
 
-            <TextView
-                android:id="@+id/btnGroupMode"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="?selectableItemBackground"
-                android:gravity="center"
-                android:onClick="@{viewListener::onClick}"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="@string/group_mode"
-                android:textColor="#0ff" />
-
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -106,9 +106,7 @@ class HomeFragment : BaseMainFragment<FragmentHomeBinding>(), IGalleryAdapterLis
 
     override fun onViewClick(vId: Int) {
         when (vId) {
-            R.id.btnGroupMode -> {
-                navigateTo(R.id.action_homeFragment_to_groupFragment)
-            }
+
         }
     }
 
