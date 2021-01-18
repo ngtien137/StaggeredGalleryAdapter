@@ -1,4 +1,4 @@
-# StaggeredGalleryAdapter
+# StaggeredGalleryAdapter [![](https://jitpack.io/v/ngtien137/StaggeredGalleryAdapter.svg)](https://jitpack.io/#ngtien137/StaggeredGalleryAdapter)
 Adapter for RecyclerView which makes collage media gallery as StaggeredGridlayout
 ## Preview 
 ![alt text](https://github.com/ngtien137/StaggeredGalleryAdapter/blob/master/git_resources/preview.gif)
